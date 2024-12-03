@@ -11,50 +11,52 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class MainPage {
 
     private final WebDriver driver;
-    //Locator. Cookie
+    // Locator. Cookie
     private final By cookieAcceptButton = By.xpath(".//button[@class='App_CookieButton__3cvqF']");
-    //Locator. Accordeon
-    private By faqAccordionItemHeading;
-    private By faqAccordionItemPanel;
-    private By faqAccordionItemPanelText;
-    //Locator. To order
+    // Locator. To order
     private final By moveToOrderUpperButton = By.xpath(".//div[@class='Header_Nav__AGCXC']/button[text()='Заказать']");
     private final By moveToOrderLowerButton = By.xpath(".//div[@class='Home_FinishButton__1_cWm']/button[text()='Заказать']");
 
-    //Constructor
-    public MainPage(WebDriver driver, String accordionItemId){
-        this.driver = driver;
-        this.faqAccordionItemHeading = By.xpath(".//div[@id='"+ accordionItemId +"']");
-        this.faqAccordionItemPanel = By.xpath(".//div[@aria-labelledby='"+ accordionItemId +"']");
-        this.faqAccordionItemPanelText = By.xpath(".//div[@aria-labelledby='"+ accordionItemId +"']/p");
-    }
-
-    public MainPage(WebDriver driver){
+    // Constructor
+    public MainPage(WebDriver driver) {
         this.driver = driver;
     }
 
-    //Method. Cookie
+    // Method. Cookie
     public void clickCookieAcceptButton() {
         driver.findElement(cookieAcceptButton).click();
     }
 
-    //Method. Accordion
-    public void clickFaqAccordionItemHeading() {
-        WebElement element = driver.findElement(faqAccordionItemHeading);
+    // Method. Accordion
+    public By getFaqAccordionItemHeading(int index) {
+        return By.id("accordion__heading-" + index);
+    }
+
+    public By getFaqAccordionItemPanel(int index) {
+        return By.xpath(".//div[@aria-labelledby='accordion__heading-" + index + "']");
+    }
+
+    public By getFaqAccordionItemPanelText(int index) {
+        return By.xpath(".//div[@aria-labelledby='accordion__heading-" + index + "']/p");
+    }
+
+    public void clickFaqAccordionItemHeading(int index) {
+        By headingLocator = getFaqAccordionItemHeading(index);
+        WebElement element = driver.findElement(headingLocator);
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", element);
-        new WebDriverWait(driver, 3).until(ExpectedConditions.elementToBeClickable(faqAccordionItemHeading));
+        new WebDriverWait(driver, 3).until(ExpectedConditions.elementToBeClickable(headingLocator));
         new Actions(driver).moveToElement(element).click().perform();
     }
 
-    public WebElement getFaqAccordionItemPanel() {
-        return driver.findElement(faqAccordionItemPanel);
+    public WebElement getFaqAccordionItemPanelElement(int index) {
+        return driver.findElement(getFaqAccordionItemPanel(index));
     }
 
-    public WebElement getFaqAccordionItemPanelText() {
-        return driver.findElement(faqAccordionItemPanelText);
+    public WebElement getFaqAccordionItemPanelTextElement(int index) {
+        return driver.findElement(getFaqAccordionItemPanelText(index));
     }
 
-    //Method. Move to placing order
+    // Method. Move to placing order
     public void clickOrderUpperButton() {
         new WebDriverWait(driver, 1)
                 .until(ExpectedConditions.visibilityOfElementLocated(moveToOrderUpperButton));

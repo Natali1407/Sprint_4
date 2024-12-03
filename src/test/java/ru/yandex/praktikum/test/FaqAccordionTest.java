@@ -7,34 +7,39 @@ import static org.hamcrest.CoreMatchers.containsString;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.assertEquals;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import io.github.bonigarcia.wdm.WebDriverManager;
 
+import static org.junit.Assert.assertEquals;
 
 @RunWith(Parameterized.class)
 public class FaqAccordionTest {
 
     private WebDriver driver;
-    private final String faqAccordionItemId;
-    private final boolean faqAccordionItemPanelHiddenExpected; //true - element is hidden, false - element isn't hidden
+    private final int faqAccordionItemIndex;
+    private final boolean faqAccordionItemPanelHiddenExpected;
     private final String faqAccordionItemPanelTextExpected;
 
-    public FaqAccordionTest(String accordionItemId, boolean faqAccordionItemPanelHiddenExpected, String faqAccordionItemPanelText){
-        this.faqAccordionItemId = accordionItemId;
+    public FaqAccordionTest(int index, boolean faqAccordionItemPanelHiddenExpected, String faqAccordionItemPanelText) {
+        this.faqAccordionItemIndex = index;
         this.faqAccordionItemPanelHiddenExpected = faqAccordionItemPanelHiddenExpected;
         this.faqAccordionItemPanelTextExpected = faqAccordionItemPanelText;
     }
 
     @Parameterized.Parameters
     public static Object[][] getInputData() {
-        return new Object[][] {
-                {"accordion__heading-0", false, "Сутки — 400 рублей. Оплата курьеру — наличными или картой."},
-                {"accordion__heading-3", false, "Только начиная с завтрашнего дня. Но скоро станем расторопнее."},
+        return new Object[][]{
+                {0, false, "Сутки — 400 рублей. Оплата курьеру — наличными или картой."},
+                {1, false, "Пока что у нас так: один заказ — один самокат. Если хотите покататься с друзьями, можете просто сделать несколько заказов — один за другим."},
+                {2, false, "Допустим, вы оформляете заказ на 8 мая. Мы привозим самокат 8 мая в течение дня. Отсчёт времени аренды начинается с момента, когда вы оплатите заказ курьеру. Если мы привезли самокат 8 мая в 20:30, суточная аренда закончится 9 мая в 20:30."},
+                {3, false, "Только начиная с завтрашнего дня. Но скоро станем расторопнее."},
+                {4, false, "Пока что нет! Но если что-то срочное — всегда можно позвонить в поддержку по красивому номеру 1010."},
+                {5, false, "Самокат приезжает к вам с полной зарядкой. Этого хватает на восемь суток — даже если будете кататься без передышек и во сне. Зарядка не понадобится."},
+                {6, false, "Да, пока самокат не привезли. Штрафа не будет, объяснительной записки тоже не попросим. Все же свои."},
+                {7, false, "Да, обязательно. Всем самокатов! И Москве, и Московской области."},
         };
     }
 
@@ -48,18 +53,17 @@ public class FaqAccordionTest {
         driver = new ChromeDriver();
         driver.get("https://qa-scooter.praktikum-services.ru/");
 
-        MainPage objMainPage = new MainPage(driver, faqAccordionItemId);
-        //Cookie
+        MainPage objMainPage = new MainPage(driver);
         objMainPage.clickCookieAcceptButton();
-        //Go to FAQ accordeon's item and click
-        objMainPage.clickFaqAccordionItemHeading();
-        //Check panel is visible
-        WebElement element = objMainPage.getFaqAccordionItemPanel();
-        boolean visibleActual = Boolean.parseBoolean(element.getAttribute("hidden"));
-        assertEquals(visibleActual, faqAccordionItemPanelHiddenExpected);
-//        //Check panel text
-        String textActual = objMainPage.getFaqAccordionItemPanelText().getText();
-        MatcherAssert.assertThat(textActual, containsString(faqAccordionItemPanelTextExpected));
+
+        // Click accordion item and check visibility and text
+        objMainPage.clickFaqAccordionItemHeading(faqAccordionItemIndex);
+
+        boolean visibleActual = Boolean.parseBoolean(objMainPage.getFaqAccordionItemPanelElement(faqAccordionItemIndex).getAttribute("hidden"));
+        assertEquals("Проверка видимости панели FAQ", faqAccordionItemPanelHiddenExpected, visibleActual);
+
+        String textActual = objMainPage.getFaqAccordionItemPanelTextElement(faqAccordionItemIndex).getText();
+        MatcherAssert.assertThat("Проверка текста панели FAQ", textActual, containsString(faqAccordionItemPanelTextExpected));
     }
 
     @After
