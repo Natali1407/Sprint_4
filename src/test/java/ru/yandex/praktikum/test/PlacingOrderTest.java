@@ -13,6 +13,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(Parameterized.class)
 public class PlacingOrderTest {
@@ -84,8 +85,7 @@ public class PlacingOrderTest {
         objOrderPage.waitForOrderConfirmationLabel();
         objOrderPage.clickOrderConfirmationButton();
 
-        boolean isOrderConfirmed = objOrderPage.isOrderConfirmed();
-        assertEquals("Заказ должен быть подтвержден", true, isOrderConfirmed);
+        assertTrue("Заказ должен быть подтвержден", objOrderPage.isOrderConfirmed());
     }
 
     @After

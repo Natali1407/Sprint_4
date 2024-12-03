@@ -3,7 +3,6 @@ package ru.yandex.praktikum.page;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -20,7 +19,6 @@ public class OrderPage {
     private final By orderAboutRentingLabel = By.xpath(".//div[text() = 'Про аренду']");
     private final By orderRentalStartDateField = By.xpath(".//input[@placeholder='* Когда привезти самокат']");
     private final By orderRentalPeriodField = By.className("Dropdown-placeholder");
-    private final By orderScooterColorField = By.className("Checkbox_Input__14A2w");
     private final By orderCommentField = By.xpath(".//input[@placeholder='Комментарий для курьера']");
     private final By orderMoveToConfirmOrderButton = By.xpath(".//div[@class='Order_Buttons__1xGrp']/button[text() = 'Заказать']");
     private final By orderConfirmationLabel = By.xpath(".//div[text() = 'Хотите оформить заказ?']");
