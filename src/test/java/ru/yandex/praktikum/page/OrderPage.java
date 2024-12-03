@@ -13,7 +13,7 @@ public class OrderPage {
     private final By orderUserSurnameField = By.xpath(".//input[@placeholder='* Фамилия']");
     private final By orderAddressField = By.xpath(".//input[@placeholder='* Адрес: куда привезти заказ']");
     private final By orderSubwayStationField = By.xpath(".//input[@placeholder='* Станция метро']");
-    private final By orderUserPhoneField = By.xpath("//input[@placeholder='* Телефон: на него позвонит курьер']");
+    private final By orderUserPhoneField = By.xpath(".//input[@placeholder='* Телефон: на него позвонит курьер']");
     private final By orderMoveToRentingInfoButton = By.xpath(".//button[text() = 'Далее']");
     private final By orderAboutUserLabel = By.xpath(".//div[text() = 'Для кого самокат']");
     private final By orderAboutRentingLabel = By.xpath(".//div[text() = 'Про аренду']");
